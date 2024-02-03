@@ -30,4 +30,29 @@
 -- drop table Ashokit_employees;
 desc Ashokit_customers;
 
+SELECT * FROM pankajdb.ashokit_users;
+alter table ashokit_users add (gender char(1),city_name varchar(50));
+alter table ashokit_users add city_name varchar(50);
+alter table ashokit_users drop city_name;
+alter table ashokit_users rename column city_name to state;
 
+-- SELECT * FROM pankajdb.ashokit_employees;
+insert into ashokit_employees values (101,'Pankaj','M','04-01-2024',now());
+
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (101, 'Pankaj', 'M', '2024-01-04', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (102, 'Dhiraj', 'M', '2024-02-05', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (103, 'Niraj', 'M', '2021-01-06', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+
+VALUES (104, 'Raj', 'M', '2021-01-07', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (105, 'Rahul', 'M', '2021-01-09', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (106, 'Denesh', 'M', '2021-01-07', NOW());
+
+select * from ashokit_employees;
+desc ashokit_employees;
+create table ashokit_users(username varchar(50),user_password varchar(100));
