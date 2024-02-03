@@ -1,0 +1,33 @@
+-- Online SQL Editor to Run SQL Online.
+-- Use the editor to create new tables, insert data and all other SQL operations.
+  
+-- create table customer_management_system(customer_id number,customer_name varchar(100),gender varchar(1),age int, location varchar(100));
+
+-- drop table customer_management_system;
+
+-- drop table customer_management;
+
+-- create table ashokit_customers(customer_id number,  customer_name varchar(50),gender varchar(15),age number,location varchar(50));
+-- insert into ashokit_customers(customer_id,customer_name,gender,age,location) values(01,'Mahesh','Male',35,"Hyderabad"); 
+-- insert into ashokit_customers(customer_id,customer_name,gender,age,location) values(02,'Ashok','Male',35,"Hyderabad");
+-- insert into ashokit_customers values(03,'Rajesh','Male',40,'Mumbai');
+-- insert into ashokit_customers values(&customerId,&customername,&gender,&age,&location);
+-- select * from ashokit_customers;
+-- set linesize 300;
+--   update Ashokit_customers set location = 'Delhi';        
+-- update Ashokit_customers  set location = 'Hydrabad' where customer_name = 'Ashok';
+-- update ashokit_customers set location='Pune' where customer_id = 1;
+-- update Ashokit_customers set location = 'Pune' where customer_name = 'Rajesh';
+-- update Ashokit_customers set location ='Bihar', age=40 where customer_name = 'Rajesh'; 
+-- update Ashokit_customers set customer_name = 'Pankaj' , age =29 where gender = 'Male' and location= 'Pune';
+-- update Ashokit_customers set customer_name = 'Niraj' , age =29 where gender = 'Male' and location= 'Pune';
+-- delete from Ashokit_customers;
+-- delete from Ashokit_customers where customer_name = 'Mahesh';
+-- delete from Ashokit_customers where customer_id = 2;
+-- insert into Ashokit_customers(customer_id,customer_name,gender,age,location) values(4,'Dhiraj','Male', 49,'Delhi');
+-- delete from Ashokit_customers where customer_name = 'Dhiraj' and age>=40; 
+-- create table ashokit_employees(empId number(5),empName varchar2(50),gender char(1),dob date,created_dt timestamp);
+-- drop table Ashokit_employees;
+desc Ashokit_customers;
+
+
