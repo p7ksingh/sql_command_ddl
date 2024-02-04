@@ -91,3 +91,23 @@ CREATE TABLE clients (
     first_name VARCHAR(50) ,
     last_name VARCHAR(50)
 );
+use pankajdb;
+SELECT * FROM pankajdb.ashokit_employees;
+insert into ashokit_employees value(109,'M','2009-04-05',now());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES ('M', '2024-01-04', NOW());
+
+SELECT * from ashokit_employees where empName is null;
+SELECT * from ashokit_employees where empName is not null;
+
+select empName as "Employee Name", dob as "Date Of Birth" from ashokit_employees where empName is not null;
+select * from ashokit_employees;
+select * from ashokit_employees ae;
+select ae.* from ashokit_employees ae;
+select ae.empId from ashokit_employees ae;
+alter table ashokit_employees add column salary varchar(100);
+insert into ashokit_employees(salary) value (100);
+update ashokit_employees set salary ='200'where empId=101;
+UPDATE ashokit_employees SET salary = '200' WHERE empId = 101;
+select empId,empName,salary,salary*12 "Annual Salary" from ashokit_employees;
+create table student(rollno int unique,sname varchar(100),sfee int, email varchar(200) unique);
