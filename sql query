@@ -74,3 +74,20 @@ create table alam(rollno int unique not null,lacation varchar(200) default 'Delh
 select * from alam;
 insert into alam(rollno) value(102);
 alter table alam modify lacation varchar(200) default null;
+create table student(rollno int unique,sname varchar(100),sfee int, email varchar(200) unique);
+SELECT * FROM student;
+insert into student values(101,'Alam',5000,'aks@gmail.com');
+insert into student(rollno,sfee,email) values(102,4500,'nks@gmail.com');
+create table student_address( hno int ,svill varchar(100), nearby varchar(100),pincode int, constraint unique_house_no unique (hno));
+select * from student_address;
+insert into student_address values(121,'chkbhairo','lado',110030);
+create table student_marks(id int,math int, science int, commerace int, english int, unique(id));
+select * from student_marks;
+create table pankaj_table(id int , salary int, location varchar(100));
+select * from pankaj_table;
+alter table pankaj_table add constraint unique(id);
+CREATE TABLE clients (
+    client_id int unique,
+    first_name VARCHAR(50) ,
+    last_name VARCHAR(50)
+);
