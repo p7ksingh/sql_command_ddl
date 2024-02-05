@@ -205,3 +205,29 @@ CREATE TABLE salaries (
     PRIMARY KEY (emp_no, from_date)
 );
 
+CREATE TABLE salaries (
+    emp_no      INT    NOT NULL,
+    salary      INT    NOT NULL,
+    from_date   DATE   NOT NULL,
+    to_date     DATE   NOT NULL,
+    KEY         (emp_no),
+    FOREIGN KEY (emp_no) REFERENCES employees (emp_no) ON DELETE CASCADE,
+    PRIMARY KEY (emp_no, from_date)
+);
+drop table student_marks;
+create table ashokit_student(
+        student_id int primary key,
+        student_name varchar(225) not null,
+        courses varchar(225) check(courses in('Core Java','Advance Java','Java Full Stack')),
+        courses_fee int check (courses_fee between 5000 and 10000),
+        contact_no varchar(10) not null unique,
+        created_dt timestamp default now() );
+ 
+ insert into ashokit_student values(01,'Mahesh','Core Java',5000,'2112112121',now());
+ insert into ashokit_student values(02,'Suresh','Advance Java',6000,'12323232',now());
+ insert into ashokit_student values(03,'Nagesh','Java Full Stack',7000,'343434343',now());
+ alter table ashokit_student rename ashokit_students;
+ select * from ashokit_students ; 
+select * from user_constraints where table_name='ASHOKIT_STUDENTS';   
+alter table ashokit_students drop primary key;
+alter table ashokit_students add primary key(student_id);
