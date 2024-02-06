@@ -231,3 +231,34 @@ create table ashokit_student(
 select * from user_constraints where table_name='ASHOKIT_STUDENTS';   
 alter table ashokit_students drop primary key;
 alter table ashokit_students add primary key(student_id);
+create table ashokit_products_info(pid varchar(10) primary key,
+                                   pname varchar(30) not null,
+                                   pcost int,
+                                   pmfg_dt date not null,
+                                   pwarranty varchar(50) not null,
+                                   company_code varchar(10),                                   
+                                   constraint ashokit_comp_code_fk foreign key(company_code) 
+                                   references ashokit_companies_info(company_code)
+                                  );
+select * from ashokit_products_info;
+drop table student_address;
+drop table salaries,titles;
+drop table alam,ashokit_employees,ashokit_student,ashokit_students,client_fake,clients,departments,dept_emp,dept_manager,emp,employees,pankaj_table,student;
+drop table dept_details;
+
+create table ashokit_student(student_id int primary key, student_name varchar(100) not null, course varchar(100) check(course in ('java','ms','advance','java')),contact varchar(10) not null, created_dt timestamp default now());
+select * from ashokit_student;
+insert into ashokit_student(student_id,student_name,course,contact) values(1,'pankaj','java','1234567890');
+truncate ashokit_student;
+create table ashokit_product_info(pid int primary key,
+                                 pname varchar(100) not null,
+                                  pocst int  not null,
+                                  pmfg_dt date not null,
+                                  pwarenty varchar(100) not null,
+                                  company_code varchar(10));
+ select * from ashokit_product_info;
+ insert into ashokit_product_info values(1022,'pankaj',1007,'2021-07-07','2yr','cmp1');
+ select pid,pname,pocst,((pocst*20)/100) as discount_price from ashokit_product_info;
+  select pid,pname,pocst,(pocst-(pocst*20)/100) as discount_price from ashokit_product_info;
+ select * from ashokit_product_info where pocst>100;
+ alter table ashokit_product_info rename column pocst to pcost;
