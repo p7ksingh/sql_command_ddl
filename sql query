@@ -282,3 +282,519 @@ INSERT INTO EMPLOYEE VALUES (0005, 'Ramu', 'BSB','9855498235', '74568', 'Sales',
 INSERT INTO EMPLOYEE VALUES (0006, 'Mahesh', 'GNoida','9851678465', '1238', 'Sales','25000');
 INSERT INTO EMPLOYEE VALUES (0007, 'Chaman', 'BSBS','9856723465', '7634', 'D10','215000');
 
+====================
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+=====================
+SELECT * FROM pankajdb.ashokit_employees;
+insert into ashokit_employees values (101,'Pankaj','M','04-01-2024',now());
+
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (101, 'Pankaj', 'M', '2024-01-04', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (102, 'Dhiraj', 'M', '2024-02-05', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (103, 'Niraj', 'M', '2021-01-06', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+
+VALUES (104, 'Raj', 'M', '2021-01-07', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (105, 'Rahul', 'M', '2021-01-09', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (106, 'Denesh', 'M', '2021-01-07', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (108, 'Denesh', 'M', '2021-01-07', NOW());
+INSERT INTO ashokit_employees (empId, empName, gender, dob, created_dt) 
+VALUES (107, 'Denesh', 'M', '2021-01-07', NOW());
+-- Today
+select * from ashokit_employees;
+desc ashokit_employees;
+create table ashokit_users(username varchar(50),user_password varchar(100));
+desc table ashokit_employees;
+select * from recylebin;
+select * from tab;
+-- drop user root cascade;
+select * from all_users;
+-- create user pankaj identified by singh;
+-- alter user pankaj identified by kumar;
+grant resources,connect to pankaj;
+revoke resources from pankaj;
+-- show user;
+select * from all_users;
+-- select * from dba_users:
+alter user pankaj account lock;
+alter user pankaj account unlock;
+-- drop user pankaj cascade;
+select * from tab;
+commit
+-- rollback
+--savepoint insertsavepoint;
+savepoint updatesavepoint;
+select * from ashokit_employees order by empId asc;
+select * from ashokit_employees order by empName desc;
+
+CREATE TABLE employees (
+    emp_no      INT             NOT NULL,  -- UNSIGNED AUTO_INCREMENT??
+    birth_date  DATE            NOT NULL,
+    first_name  VARCHAR(14)     NOT NULL,
+    last_name   VARCHAR(16)     NOT NULL,
+    gender      ENUM ('M','F')  NOT NULL,  -- Enumeration of either 'M' or 'F'  
+    hire_date   DATE            NOT NULL,
+    PRIMARY KEY (emp_no)                   -- Index built automatically on primary-key column
+                                           -- INDEX (first_name)
+                                           -- INDEX (last_name)
+);
+CREATE TABLE departments (
+    dept_no     CHAR(4)         NOT NULL,  -- in the form of 'dxxx'
+    dept_name   VARCHAR(40)     NOT NULL,
+    PRIMARY KEY (dept_no),                 -- Index built automatically
+    UNIQUE  KEY (dept_name)                -- Build INDEX on this unique-value column
+);
+CREATE TABLE dept_emp (
+    emp_no      INT         NOT NULL,
+    dept_no     CHAR(4)     NOT NULL,
+    from_date   DATE        NOT NULL,
+    to_date     DATE        NOT NULL,
+    KEY         (emp_no),   -- Build INDEX on this non-unique-value column
+    KEY         (dept_no),  -- Build INDEX on this non-unique-value column
+    FOREIGN KEY (emp_no) REFERENCES employees (emp_no) ON DELETE CASCADE,
+           -- Cascade DELETE from parent table 'employee' to this child table
+           -- If an emp_no is deleted from parent 'employee', all records
+           --  involving this emp_no in this child table are also deleted
+           -- ON UPDATE CASCADE??
+    FOREIGN KEY (dept_no) REFERENCES departments (dept_no) ON DELETE CASCADE,
+           -- ON UPDATE CASCADE??
+    PRIMARY KEY (emp_no, dept_no)
+           -- Might not be unique?? Need to include from_date
+);
+CREATE TABLE dept_manager (
+   dept_no      CHAR(4)  NOT NULL,
+   emp_no       INT      NOT NULL,
+   from_date    DATE     NOT NULL,
+   to_date      DATE     NOT NULL,
+   KEY         (emp_no),
+   KEY         (dept_no),
+   FOREIGN KEY (emp_no)  REFERENCES employees (emp_no)    ON DELETE CASCADE,
+                                  -- ON UPDATE CASCADE??
+   FOREIGN KEY (dept_no) REFERENCES departments (dept_no) ON DELETE CASCADE,
+   PRIMARY KEY (emp_no, dept_no)  -- might not be unique?? Need from_date
+);
+CREATE TABLE titles (
+    emp_no      INT          NOT NULL,
+    title       VARCHAR(50)  NOT NULL,
+    from_date   DATE         NOT NULL,
+    to_date     DATE,
+    KEY         (emp_no),
+    FOREIGN KEY (emp_no) REFERENCES employees (emp_no) ON DELETE CASCADE,
+                         -- ON UPDATE CASCADE??
+    PRIMARY KEY (emp_no, title, from_date)
+       -- This ensures unique combination. 
+       -- An employee may hold the same title but at different period
+);
+CREATE TABLE salaries (
+    emp_no      INT    NOT NULL,
+    salary      INT    NOT NULL,
+    from_date   DATE   NOT NULL,
+    to_date     DATE   NOT NULL,
+    KEY         (emp_no),
+    FOREIGN KEY (emp_no) REFERENCES employees (emp_no) ON DELETE CASCADE,
+    PRIMARY KEY (emp_no, from_date)
+);
+drop table student_marks;
+create table ashokit_student(
+        student_id int primary key,
+        student_name varchar(225) not null,
+        courses varchar(225) check(courses in('Core Java','Advance Java','Java Full Stack')),
+        courses_fee int check (courses_fee between 5000 and 10000),
+        contact_no varchar(10) not null unique,
+        created_dt timestamp default now() );
+ 
+ insert into ashokit_student values(01,'Mahesh','Core Java',5000,'2112112121',now());
+ insert into ashokit_student values(02,'Suresh','Advance Java',6000,'12323232',now());
+ insert into ashokit_student values(03,'Nagesh','Java Full Stack',7000,'343434343',now());
+ alter table ashokit_student rename ashokit_students;
+ select * from ashokit_students ; 
+select * from user_constraints where table_name='ASHOKIT_STUDENTS';   
+alter table ashokit_students drop primary key;
+alter table ashokit_students add primary key(student_id);
+select * from user_constraints;
+create table ashokit_products_info(pid varchar(10) primary key,
+                                   pname varchar(30) not null,
+                                   pcost int,
+                                   pmfg_dt date not null,
+                                   pwarranty varchar(50) not null,
+                                   company_code varchar(10),                                   
+                                   constraint ashokit_comp_code_fk foreign key(company_code) 
+                                   references ashokit_companies_info(company_code)
+                                  );
+select * from ashokit_products_info;
+drop table student_address;
+drop table salaries,titles;
+drop table alam,ashokit_employees,ashokit_student,ashokit_students,client_fake,clients,departments,dept_emp,dept_manager,emp,employees,pankaj_table,student;
+drop table dept_details;
+
+create table ashokit_student(student_id int primary key, student_name varchar(100) not null, course varchar(100) check(course in ('java','ms','advance','java')),contact varchar(10) not null, created_dt timestamp default now());
+select * from ashokit_student;
+insert into ashokit_student(student_id,student_name,course,contact) values(1,'pankaj','java','1234567890');
+truncate ashokit_student;
+create table ashokit_product_info(pid int primary key,
+                                 pname varchar(100) not null,
+                                  pocst int  not null,
+                                  pmfg_dt date not null,
+                                  pwarenty varchar(100) not null,
+                                  company_code varchar(10));
+ select * from ashokit_product_info;
+ insert into ashokit_product_info values(1022,'pankaj',1007,'2021-07-07','2yr','cmp1');
+ select pid,pname,pocst,((pocst*20)/100) as discount_price from ashokit_product_info;
+  select pid,pname,pocst,(pocst-(pocst*20)/100) as discount_price from ashokit_product_info;
+ select * from ashokit_product_info where pocst>100;
+ alter table ashokit_product_info rename column pocst to pcost;
+ 
+ 
+ CREATE TABLE Users (
+userId SERIAL PRIMARY KEY,
+name VARCHAR(255),
+email VARCHAR(255),
+password VARCHAR(255),
+profilePhotoUrl VARCHAR(255),
+bio VARCHAR(255),
+website VARCHAR(255)
+);
+CREATE TABLE Followers (
+followerId INTEGER REFERENCES Users(userId),
+followedById INTEGER REFERENCES Users(userId)
+);
+
+CREATE TABLE Media (
+mediaId SERIAL PRIMARY KEY,
+userId INTEGER REFERENCES Users(userId),
+mediaType VARCHAR(255),
+fileUrl VARCHAR(255),
+thumbnailUrl VARCHAR(255),
+timestamp TIMESTAMP,
+location VARCHAR(255)
+
+);
+CREATE TABLE Posts (
+postId SERIAL PRIMARY KEY,
+userId INTEGER REFERENCES Users(userId),
+caption VARCHAR(255)
+);
+CREATE TABLE PostMedia (
+postId INTEGER REFERENCES Posts(postId),
+mediaId INTEGER REFERENCES Media(mediaId)
+);
+CREATE TABLE Likes (
+likeId SERIAL PRIMARY KEY,
+userId INTEGER REFERENCES Users(userId),
+postId INTEGER REFERENCES Posts(postId)
+);
+CREATE TABLE Comments (
+commentId SERIAL PRIMARY KEY,
+commentText VARCHAR(255),
+userId INTEGER REFERENCES Users(userId),
+postId INTEGER REFERENCES Posts(postId)
+
+);
+-- create
+CREATE TABLE EMPLOYEE (
+  Emp_NO INTEGER PRIMARY KEY,
+  Emp_Name TEXT NOT NULL,
+  Emp_Add TEXT NOT NULL,
+  Emp_Phone TEXT NOT NULL,
+  Dept_No TEXT NOT NULL,
+  Dept_Name TEXT NOT NULL,
+  Salary TEXT NOT NULL
+);
+select * from EMPLOYEE;
+drop table EMPLOYEE;
+-- insert
+INSERT INTO EMPLOYEE VALUES (0001, 'Ramesh', 'GNoida','9855498465', '3445', 'Sales','25000');
+INSERT INTO EMPLOYEE VALUES (0002, 'Suresh', 'GNoida','98565498465', '0072', 'Sales','75000');
+INSERT INTO EMPLOYEE VALUES (0003, 'Rajesh', 'GNoida','9855497865', '2324', 'Sales','28000');
+INSERT INTO EMPLOYEE VALUES (0004, 'Shyamu', 'BSB','9853698465', '8883', 'Sales','35000');
+INSERT INTO EMPLOYEE VALUES (0005, 'Ramu', 'BSB','9855498235', '74568', 'Sales','96000');
+INSERT INTO EMPLOYEE VALUES (0006, 'Mahesh', 'GNoida','9851678465', '1238', 'Sales','25000');
+INSERT INTO EMPLOYEE VALUES (0007, 'Chaman', 'BSBS','9856723465', '7634', 'D10','215000');
+CREATE TABLE DEPARTMENT
+(
+   DEPTCODE   INT(10),
+   DeptName   CHAR(30),
+   LOCATION   VARCHAR(33)
+);
+CREATE TABLE EMPLOYEE
+(
+   EmpCode      INT(4),
+   EmpFName     VARCHAR(15),
+   EmpLName     VARCHAR(15),
+   Job          VARCHAR(45),
+   Manager      CHAR(4),
+   HireDate     DATE,
+   Salary       INT(6),
+   Commission   INT(6),
+   DEPTCODE     INT(2)
+);
+-- Today
+DROP SCHEMA IF EXISTS pankajdb;
+create schema employee_management;
+use employee_management;
+create table department
+(
+   deptcode int(10),
+   deptname varchar(30),
+   location varchar(33)
+ );  
+ alter table department modify deptcode INTEGER;
+ select * from department;
+ create table employee
+ (
+  empcode INTEGER,
+  empfname varchar(15),
+  emplname varchar(15),
+  job varchar(15),
+  manager char(4),
+  hiredate date,
+  salary integer(6),
+  commission int(6),
+  deptcode int(10)
+  );
+  select * from employee;
+  alter table department add primary key(deptcode);
+alter table department modify deptname varchar(30) not null;
+--  ALTER TABLE department MODIFY deptname VARCHAR(30) NOT NULL;
+alter table department modify location varchar(33) not null;
+select * from department;
+desc department;
+alter table employee add primary key(empcode);
+alter table employee modify empfname varchar(15) not null;
+alter table employee modify emplname varchar(15) not null;
+alter table employee add constraint foreign key(deptcode) references department(deptcode);
+alter table employee change column salary salary decimal(6,2);
+desc employee;
+-- important add column at specific place
+alter table employee add column dob date after emplname;
+alter table employee drop column dob;
+select * from employee;
+alter table employee change column job job varchar(45);
+INSERT INTO DEPARTMENT VALUES (10, 'FINANCE', 'EDINBURGH'),
+                              (20,'SOFTWARE','PADDINGTON'),
+                              (30, 'SALES', 'MAIDSTONE'),
+                              (40,'MARKETING', 'DARLINGTON'),
+                              (50,'ADMIN', 'BIRMINGHAM');
+INSERT INTO EMPLOYEE  
+VALUES (9369, 'TONY', 'STARK', 'SOFTWARE ENGINEER', 7902, '1980-12-17', 2800,0,20),
+       (9499, 'TIM', 'ADOLF', 'SALESMAN', 7698, '1981-02-20', 1600, 300,30),    
+       (9566, 'KIM', 'JARVIS', 'MANAGER', 7839, '1981-04-02', 3570,0,20),
+       (9654, 'SAM', 'MILES', 'SALESMAN', 7698, '1981-09-28', 1250, 1400, 30),
+       (9782, 'KEVIN', 'HILL', 'MANAGER', 7839, '1981-06-09', 2940,0,10),
+       (9788, 'CONNIE', 'SMITH', 'ANALYST', 7566, '1982-12-09', 3000,0,20),
+       (9839, 'ALFRED', 'KINSLEY', 'PRESIDENT', 7566, '1981-11-17', 5000,0, 10),
+       (9844, 'PAUL', 'TIMOTHY', 'SALESMAN', 7698, '1981-09-08', 1500,0,30),
+       (9876, 'JOHN', 'ASGHAR', 'SOFTWARE ENGINEER', 7788, '1983-01-12',3100,0,20),
+       (9900, 'ROSE', 'SUMMERS', 'TECHNICAL LEAD', 7698, '1981-12-03', 2950,0, 20),
+       (9902, 'ANDREW', 'FAULKNER', 'ANAYLYST', 7566, '1981-12-03', 3000,0, 10),
+       (9934, 'KAREN', 'MATTHEWS', 'SOFTWARE ENGINEER', 7782, '1982-01-23', 3300,0,20),
+       (9591, 'WENDY', 'SHAWN', 'SALESMAN', 7698, '1981-02-22', 500,0,30),
+       (9698, 'BELLA', 'SWAN', 'MANAGER', 7839, '1981-05-01', 3420, 0,30),
+       (9777, 'MADII', 'HIMBURY', 'ANALYST', 7839, '1981-05-01', 2000, 200, NULL),
+       (9860, 'ATHENA', 'WILSON', 'ANALYST', 7839, '1992-06-21', 7000, 100, 50),
+       (9861, 'JENNIFER', 'HUETTE', 'ANALYST', 7839, '1996-07-01', 5000, 100, 50);
+       
+select * from employee as e;
+select * from department as d;
+select e.empfname,e.emplname,e.deptcode, d.deptname,d.location from employee e , department d where e.deptcode = d.deptcode order by e.empfname,d.location;       
+select * from employee where commission <>'0';
+select * from employee where commission between 100 and 500;
+select * from employee where hiredate between '1981-01-01' and '1981-12-31';
+select * from employee where job = 'salesman';
+select * from employee where job in('salesman','analyst');
+select * from employee where job not in ('salesman','analyst') order by job asc;
+select * from department;
+select deptcode from department where deptname='sales';
+select * from employee where deptcode in (select deptcode from department where deptname='sales');
+select * from employee where empfname like 'T%' order by empfname asc ;
+select * from employee where empfname like '%a';
+select * from employee where empfname like 'j%r';
+select * from employee as e;
+select * from employee where empfname like '----y';
+-- ddl
+create table dept(
+  deptno int(4),
+  dname  varchar(14),
+  loc    varchar(13),
+  constraint pk_dept primary key (deptno)
+);
+create table emp(
+  empno    int(4),
+  ename    varchar(10),
+  job      varchar(9),
+  mgr      int(4),
+  hiredate date,
+  sal      int(7),
+  comm     int(7),
+  deptno   int(4),
+  constraint pk_emp primary key (empno),
+  constraint fk_deptno foreign key (deptno) references dept (deptno)
+);
+-- dml
+insert into dept
+values(10, 'ACCOUNTING', 'NEW YORK');
+insert into dept
+values(20, 'RESEARCH', 'DALLAS');
+insert into dept
+values(30, 'SALES', 'CHICAGO');
+insert into dept
+values(40, 'OPERATIONS', 'BOSTON');
+ 
+
+INSERT INTO emp
+VALUES (
+ 7839, 'KING', 'PRESIDENT', null,
+ STR_TO_DATE('17-11-1981','%d-%m-%Y'),
+ 5000, null, 10
+);
+insert into emp
+values(
+ 7698, 'BLAKE', 'MANAGER', 7839,
+  STR_TO_DATE('1-5-1981','%d-%m-%Y'),
+ 2850, null, 30
+);
+insert into emp
+values(
+ 7782, 'CLARK', 'MANAGER', 7839,
+ STR_TO_DATE('2-12-1981','%d-%m-%Y'),
+ 2450, null, 10
+);
+insert into emp
+values(
+ 7566, 'JONES', 'MANAGER', 7839,
+ str_to_date('2-4-1981','%d-%m-%Y'),
+ 2975, null, 20
+);
+insert into emp
+values(
+ 7788, 'SCOTT', 'ANALYST', 7566,
+ str_to_date('13-07-1887','%d-%m-%Y'),
+ 3000, null, 20
+);
+insert into emp
+values(
+ 7902, 'FORD', 'ANALYST', 7566,
+ str_to_date('3-12-1981','%d-%m-%Y'),
+ 3000, null, 20
+);
+insert into emp
+values(
+ 7369, 'SMITH', 'CLERK', 7902,
+ str_to_date('17-12-1980','%d-%m-%Y'),
+ 800, null, 20
+);
+insert into emp
+values(
+ 7499, 'ALLEN', 'SALESMAN', 7698,
+ to_date('20-2-1981','%d-%m-%Y'),
+ 1600, 300, 30
+);
+insert into emp
+values(
+ 7521, 'WARD', 'SALESMAN', 7698,
+ str_to_date('22-2-1981','%d-%m-%Y'),
+ 1250, 500, 30
+);
+insert into emp
+values(
+ 7654, 'MARTIN', 'SALESMAN', 7698,
+ str_to_date('28-9-1981','%d-%m-%Y'),
+ 1250, 1400, 30
+);
+insert into emp
+values(
+ 7844, 'TURNER', 'SALESMAN', 7698,
+ str_to_date('8-9-1981','%d-%y-%Y'),
+ 1500, 0, 30
+);
+insert into emp
+values(
+ 7876, 'ADAMS', 'CLERK', 7788,
+ str_to_date('13-07-87', '%d-%m-%Y'),
+ 1100, null, 20
+);
+insert into emp
+values(
+ 7900, 'JAMES', 'CLERK', 7698,
+ str_to_date('3-12-1981','%d-%m-%Y'),
+ 950, null, 30
+);
+insert into emp
+values(
+ 7934, 'MILLER', 'CLERK', 7782,
+ str_to_date('23-1-1982','%d-%m-%Y'),
+ 1300, null, 10
+);
+select * from emp;
+select * from dept;
+select length("Welcome To Ashok IT") from dual;
+select sysdate from dual;
+select now() from dual;
+select (2+3+4+5)/2 as "Division Operation" from dual;
+select ename, length(ename) from emp;
+select ename,length(ename) from emp;
+select initcap('empname') from emp;
+select initcap('Welcome to ashok it hyderabad') from dual;
+select chr(122) from dual;
+select ascii('a') from dual;
+select ascii('A') from dual;
+select upper('pankaj') from dual;
+select lower('PANKAJ') from dual;
+select reverse('pankaj') from dual;
+select trim(' Hi Pankaj') from dual;
+select ltrim(' Hi Pankaj ') from dual;
+select rtrim(' Hi Pankaj ') from dual;
+select lpad('pankaj','15','*');
+select rpad('pankaj','15','*');
+select translate('pankaj','a','A') from dual;
+select translate('JACKJ','J','B') from dual;
+select instr('i am from india having very big knowlege in computer science','in') asecond_occurance from dual;
+SELECT INSTR( 'This is a playlist', 'is','1' ) second_occurrence from dual;
+SELECT INSTR('This is a playlist', 'is', 1, 2) AS second_occurrence FROM dual;
+select abs(-19) from dual;
+select round(9.5) from dual;
+select round(9.4) from dual;
+select floor(9.5) from dual;
+select ceil(9.1) from dual;
+select greatest(10.25,25.68,89.47,25.14)as "Max" from dual;
+select least(10.25,25.68,89.47,25.14)as "Max" from dual;
+select mod(10,2) from dual;
+select mod(16,5) from dual;
+select sqrt(100) from dual;
+select power(5,3) from dual;
+select log(10,10) from dual;
+select add_months(sysdate,12) from dual;
+select add_months(sysdate,12) from dual;
+SELECT DATE_ADD(NOW(), INTERVAL 12 MONTH) AS future_date;
+select months_between(sysdate,'22-DEC-23') from dual;
+select months_between(now(),'22-DEC-23') from dual;
+select next_day(sysdate,'SUNDAY') from dual;
+select next_day(now(),'SUNDAY') from dual;
+SELECT DATE_ADD(NOW(), INTERVAL ((8 - DAYOFWEEK(NOW()) + 1) % 7) DAY) AS next_sunday;
+select extract(year from sysdate) from dual;
+select extract(year from now()) from dual;
+select extract(month from now()) from dual;
+select extract(day from now()) from dual;
+
+SELECT TIMESTAMPDIFF(MONTH, '2023-12-22', NOW()) AS months_difference;
+select last_day(sysdate) from dual
+-- SELECT LAST_DAY(NOW());
+select to_char(sysdate,'DD/MM/YYYY') from dual;
+SELECT DATE_FORMAT(NOW(), '%d/%m/%Y') AS formatted_date;
+select to_char(sysdate,'DD-MON-YYYY') from dual;
+SELECT DATE_FORMAT(NOW(), '%d-%b-%Y') AS formatted_date;
+select to_char(sysdate,'DAY') from dual;
+SELECT DATE_FORMAT(NOW(), '%W') AS day_name;
+select to_char(sysdate,'MONTH') from dual;
+SELECT DATE_FORMAT(NOW(), '%M') AS month_name;
+select to_char(sysdate,'DD-MON-YYYY HH:MM::SS') from dual;
+SELECT DATE_FORMAT(NOW(), '%d-%b-%Y %H:%i:%s') AS formatted_datetime;
+select to_char(sysdate,'YYYY') from dual;
+select date_format(now(),'%Y') as year_name;
+      
+
