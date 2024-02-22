@@ -797,4 +797,61 @@ SELECT DATE_FORMAT(NOW(), '%d-%b-%Y %H:%i:%s') AS formatted_datetime;
 select to_char(sysdate,'YYYY') from dual;
 select date_format(now(),'%Y') as year_name;
       
+===================
+-- Active: 1704909976997@@127.0.0.1@3306@employee_management
+select * from dept;
+SELECT * from emp;
+
+select * from dept;
+
+select * from emp where deptno=30;
+select * from dept where deptno =30;
+select deptno from dept where dname='SALES';
+
+select * from emp where deptno=(select deptno from dept where dname='SALES');
+
+select * from emp;
+
+select * from emp where ename='SMITH';
+select deptno from emp where ename ='SMITH';
+
+select * from dept where deptno in (select deptno from emp where ename='SMITH');-- good performance
+
+select * from dept where deptno = (select deptno from emp where ename='SMITH');-- bad performance
+select * from dept ;
+select * FROM dept where dname='SALES';
+select * from emp where deptno = 30;
+select * from emp where deptno IN (select deptno from dept where dname='SALES');
+select * from emp;
+select * from emp where empno = 7788;
+select * from emp where sal <= (select sal from emp where empno=7788);
+select * from emp;
+select sal from emp where empno = 7788;
+select * from emp where comm is not null;
+select * from emp where sal < (select sal from emp where empno=7788 );
+select * from emp where sal < (select sal from emp where empno=7788 ) and comm is not null;
+
+select * from dept;
+select * from emp;
+
+select * from emp where ename='BLAKE';-- 7698
+select * from emp where mgr = 7698;
+select * from emp WHERE mgr in (select empno from emp where UPPER(ename) = 'BLAKE');-- upper keep in Mind
+
+select * from emp;
+select * from dept;
+
+select * from dept where loc ='CHICAGO';
+
+select deptno from dept where loc ='CHICAGO';
+
+select * from emp where deptno in (SELECT deptno from dept where loc ='CHICAGO');
+
+select * from emp where sal in (select max(sal) from emp);
+-- second max salary
+select max(sal) from emp;
+select max(sal) from emp where sal < (select max(sal) from emp);
+
+select * from emp WHERE sal = (select max(sal) from emp where sal < (select max(sal) from emp));
+
 
