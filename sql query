@@ -853,5 +853,15 @@ select max(sal) from emp;
 select max(sal) from emp where sal < (select max(sal) from emp);
 
 select * from emp WHERE sal = (select max(sal) from emp where sal < (select max(sal) from emp));
+================
+select sysdate from dual;
 
+-- JOIN
+select * from emp e, dept d where d.deptno = e.deptno;
+select * from dept;
+
+select e.empno,e.ename,e.sal,d.loc from emp e, dept d where d.deptno = e.deptno;
+
+select e.empno,e.ename,e.sal,d.loc from emp e, dept d where d.deptno = e.deptno and d.dname='ACCOUNTING';
+select e.ename,e.empno,e.sal,d.loc from emp e join dept d on d.deptno=e.deptno where d.dname='ACCOUNTING';
 
