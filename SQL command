@@ -1,0 +1,1039 @@
++-----------------+------------------+------------------+
+| ProjectDetailID | EmployeeDetailID | ProjectName      |
++-----------------+------------------+------------------+
+|               1 |                1 | Task Track       |
+|               2 |                1 | CLP              |
+|               3 |                1 | Survey Managment |
+|               4 |                1 | HR Managment     |
+|               5 |         23456789 | Task Track       |
+|               6 |         23456789 | GRS              |
+|               7 |         11233346 | DDS              |
+|               8 |         11233346 | HR Managment     |
+|               9 |         11233346 | GL Managment     |
++-----------------+------------------+------------------+
+9 rows in set (0.00 sec)
+
+mysql> select ProjectName from projectdetail;
++------------------+
+| ProjectName      |
++------------------+
+| Task Track       |
+| CLP              |
+| Survey Managment |
+| HR Managment     |
+| Task Track       |
+| GRS              |
+| DDS              |
+| HR Managment     |
+| GL Managment     |
++------------------+
+9 rows in set (0.00 sec)
+
+mysql> select ProjectName from projectdetail group by projectname;
++------------------+
+| ProjectName      |
++------------------+
+| Task Track       |
+| CLP              |
+| Survey Managment |
+| HR Managment     |
+| GRS              |
+| DDS              |
+| GL Managment     |
++------------------+
+7 rows in set (0.00 sec)
+
+mysql> select ProjectName, count(*) as NoOfEmp from projectdetail group by projectname;
++------------------+---------+
+| ProjectName      | NoOfEmp |
++------------------+---------+
+| Task Track       |       2 |
+| CLP              |       1 |
+| Survey Managment |       1 |
+| HR Managment     |       2 |
+| GRS              |       1 |
+| DDS              |       1 |
+| GL Managment     |       1 |
++------------------+---------+
+7 rows in set (0.00 sec)
+
+mysql> select ProjectName, count(*) as NoOfEmp from projectdetail group by projectname having NoOfEmp>1;
++--------------+---------+
+| ProjectName  | NoOfEmp |
++--------------+---------+
+| Task Track   |       2 |
+| HR Managment |       2 |
++--------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select ProjectName, count(*) as NoOfEmp from projectdetail group by projectname having count(*)>1;
++--------------+---------+
+| ProjectName  | NoOfEmp |
++--------------+---------+
+| Task Track   |       2 |
+| HR Managment |       2 |
++--------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employeedetail;
++------------+-----------+----------+--------+---------------------+------------+--------+
+| EmployeeID | FirstName | LastName | Salary | JoiningDate         | Department | Gender |
++------------+-----------+----------+--------+---------------------+------------+--------+
+|          1 | John      | Doe      |  50000 | 2024-03-26 09:00:00 | IT         | Male   |
+|          2 | Jane      | Smith    |  65000 | 2024-03-25 10:30:00 | HR         | Female |
+|          3 | Alice     | Johnson  |  55000 | 2024-03-27 08:45:00 | Finance    | Female |
+|          4 | Michael   | Brown    |  60000 | 2024-03-28 11:15:00 | Marketing  | Male   |
+|          5 | Emily     | Taylor   |  70000 | 2024-03-29 09:30:00 | Sales      | Female |
+|          6 | David     | Clark    |  52000 | 2024-03-30 10:00:00 | IT         | Male   |
++------------+-----------+----------+--------+---------------------+------------+--------+
+6 rows in set (0.01 sec)
+
+mysql> select * from projectdetail;
++-----------------+------------------+------------------+
+| ProjectDetailID | EmployeeDetailID | ProjectName      |
++-----------------+------------------+------------------+
+|               1 |                1 | Task Track       |
+|               2 |                1 | CLP              |
+|               3 |                1 | Survey Managment |
+|               4 |                1 | HR Managment     |
+|               5 |         23456789 | Task Track       |
+|               6 |         23456789 | GRS              |
+|               7 |         11233346 | DDS              |
+|               8 |         11233346 | HR Managment     |
+|               9 |         11233346 | GL Managment     |
++-----------------+------------------+------------------+
+9 rows in set (0.00 sec)
+
+mysql> ALTER TABLE ProjectDetail
+    -> ADD COLUMN EmployeeDetailID INT;
+ERROR 1060 (42S21): Duplicate column name 'EmployeeDetailID'
+mysql> ALTER TABLE ProjectDetail
+    -> ADD CONSTRAINT fk_EmployeeDetailID
+    ->     FOREIGN KEY (EmployeeDetailID)
+    ->     REFERENCES EmployeeDetail(EmployeeID);
+ERROR 1822 (HY000): Failed to add the foreign key constraint. Missing index for constraint 'fk_EmployeeDetailID' in the referenced table 'EmployeeDetail'
+mysql> ALTER TABLE EmployeeDetail
+    -> ADD PRIMARY KEY (EmployeeID);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE ProjectDetail
+    -> ADD CONSTRAINT fk_EmployeeDetailID
+    ->     FOREIGN KEY (EmployeeDetailID)
+    ->     REFERENCES EmployeeDetail(EmployeeID);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`sys`.`#sql-188_9`, CONSTRAINT `fk_EmployeeDetailID` FOREIGN KEY (`EmployeeDetailID`) REFERENCES `employeedetail` (`EmployeeID`))
+mysql> ALTER TABLE ProjectDetail ADD CONSTRAINT fk_EmployeeDetailID FOREIGN KEY(EmployeeDetailID) REFERENCES EmployeeDetail(EmployeeID);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`sys`.`#sql-188_9`, CONSTRAINT `fk_EmployeeDetailID` FOREIGN KEY (`EmployeeDetailID`) REFERENCES `employeedetail` (`EmployeeID`))
+mysql> select * from projectdetail;
++-----------------+------------------+------------------+
+| ProjectDetailID | EmployeeDetailID | ProjectName      |
++-----------------+------------------+------------------+
+|               1 |                1 | Task Track       |
+|               2 |                1 | CLP              |
+|               3 |                1 | Survey Managment |
+|               4 |                1 | HR Managment     |
+|               5 |         23456789 | Task Track       |
+|               6 |         23456789 | GRS              |
+|               7 |         11233346 | DDS              |
+|               8 |         11233346 | HR Managment     |
+|               9 |         11233346 | GL Managment     |
++-----------------+------------------+------------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from employeedetail;
++------------+-----------+----------+--------+---------------------+------------+--------+
+| EmployeeID | FirstName | LastName | Salary | JoiningDate         | Department | Gender |
++------------+-----------+----------+--------+---------------------+------------+--------+
+|          1 | John      | Doe      |  50000 | 2024-03-26 09:00:00 | IT         | Male   |
+|          2 | Jane      | Smith    |  65000 | 2024-03-25 10:30:00 | HR         | Female |
+|          3 | Alice     | Johnson  |  55000 | 2024-03-27 08:45:00 | Finance    | Female |
+|          4 | Michael   | Brown    |  60000 | 2024-03-28 11:15:00 | Marketing  | Male   |
+|          5 | Emily     | Taylor   |  70000 | 2024-03-29 09:30:00 | Sales      | Female |
+|          6 | David     | Clark    |  52000 | 2024-03-30 10:00:00 | IT         | Male   |
++------------+-----------+----------+--------+---------------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> delete table projectdetail;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table projectdetail' at line 1
+mysql> drop table projectdetail;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from employeedetail;
++------------+-----------+----------+--------+---------------------+------------+--------+
+| EmployeeID | FirstName | LastName | Salary | JoiningDate         | Department | Gender |
++------------+-----------+----------+--------+---------------------+------------+--------+
+|          1 | John      | Doe      |  50000 | 2024-03-26 09:00:00 | IT         | Male   |
+|          2 | Jane      | Smith    |  65000 | 2024-03-25 10:30:00 | HR         | Female |
+|          3 | Alice     | Johnson  |  55000 | 2024-03-27 08:45:00 | Finance    | Female |
+|          4 | Michael   | Brown    |  60000 | 2024-03-28 11:15:00 | Marketing  | Male   |
+|          5 | Emily     | Taylor   |  70000 | 2024-03-29 09:30:00 | Sales      | Female |
+|          6 | David     | Clark    |  52000 | 2024-03-30 10:00:00 | IT         | Male   |
++------------+-----------+----------+--------+---------------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from projectdetail;
+ERROR 1146 (42S02): Table 'sys.projectdetail' doesn't exist
+mysql> CREATE TABLE ProjectDetail (
+    ->     ProjectID INT AUTO_INCREMENT PRIMARY KEY,
+    ->     EmployeeID INT,
+    ->     ProjectName VARCHAR(255),
+    ->     CONSTRAINT fk_EmployeeID FOREIGN KEY (EmployeeID) REFERENCES EmployeeDetail(EmployeeID)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from projectdetail;
+Empty set (0.00 sec)
+
+mysql> ALTER TABLE ProjectDetail
+    -> ADD CONSTRAINT fk_EmployeeID
+    -> FOREIGN KEY (EmployeeID) REFERENCES EmployeeDetail(EmployeeID);
+ERROR 1826 (HY000): Duplicate foreign key constraint name 'fk_EmployeeID'
+mysql> ALTER TABLE ProjectDetail ADD CONSTRAINT fk_EmployeeID FOREIGN KEY (EmployeeID) REFERENCES EmployeeDetail(EmployeeID);
+ERROR 1826 (HY000): Duplicate foreign key constraint name 'fk_EmployeeID'
+mysql> INSERT INTO ProjectDetail (EmployeeID, ProjectName)
+    -> VALUES
+    ->     (1, 'Task Track'),
+    ->     (1, 'CLP'),
+    ->     (1, 'Survey Management'),
+    ->     (2, 'HR Management'),
+    ->     (3, 'Finance Project'),
+    ->     (4, 'Marketing Campaign'),
+    ->     (5, 'Sales Strategy'),
+    ->     (6, 'IT Project A'),
+    ->     (6, 'IT Project B'),
+    ->     (2, 'HR Training Program');
+Query OK, 10 rows affected (0.00 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from projectdetail;                                                                                                                                         
++-----------+------------+---------------------+
+| ProjectID | EmployeeID | ProjectName         |
++-----------+------------+---------------------+
+|         1 |          1 | Task Track          |
+|         2 |          1 | CLP                 |
+|         3 |          1 | Survey Management   |
+|         4 |          2 | HR Management       |
+|         5 |          3 | Finance Project     |
+|         6 |          4 | Marketing Campaign  |
+|         7 |          5 | Sales Strategy      |
+|         8 |          6 | IT Project A        |
+|         9 |          6 | IT Project B        |
+|        10 |          2 | HR Training Program |
++-----------+------------+---------------------+
+10 rows in set (0.00 sec)
+
+mysql> INSERT INTO ProjectDetail (EmployeeID, ProjectName)
+    -> VALUES
+    ->     (1, 'Task Track'),
+    ->     (2, 'Task Track'),
+    ->     (3, 'Task Track'),
+    ->     (4, 'Task Track'),
+    ->     (5, 'Task Track'),
+    ->     (6, 'Task Track'),
+    ->     (1, 'CLP'),
+    ->     (2, 'CLP'),
+    ->     (3, 'CLP'),
+    ->     (4, 'CLP');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from projectdetail;
++-----------+------------+---------------------+
+| ProjectID | EmployeeID | ProjectName         |
++-----------+------------+---------------------+
+|         1 |          1 | Task Track          |
+|         2 |          1 | CLP                 |
+|         3 |          1 | Survey Management   |
+|         4 |          2 | HR Management       |
+|         5 |          3 | Finance Project     |
+|         6 |          4 | Marketing Campaign  |
+|         7 |          5 | Sales Strategy      |
+|         8 |          6 | IT Project A        |
+|         9 |          6 | IT Project B        |
+|        10 |          2 | HR Training Program |
+|        11 |          1 | Task Track          |
+|        12 |          2 | Task Track          |
+|        13 |          3 | Task Track          |
+|        14 |          4 | Task Track          |
+|        15 |          5 | Task Track          |
+|        16 |          6 | Task Track          |
+|        17 |          1 | CLP                 |
+|        18 |          2 | CLP                 |
+|        19 |          3 | CLP                 |
+|        20 |          4 | CLP                 |
++-----------+------------+---------------------+
+20 rows in set (0.00 sec)
+
+mysql> select * from employeedetail;
++------------+-----------+----------+--------+---------------------+------------+--------+
+| EmployeeID | FirstName | LastName | Salary | JoiningDate         | Department | Gender |
++------------+-----------+----------+--------+---------------------+------------+--------+
+|          1 | John      | Doe      |  50000 | 2024-03-26 09:00:00 | IT         | Male   |
+|          2 | Jane      | Smith    |  65000 | 2024-03-25 10:30:00 | HR         | Female |
+|          3 | Alice     | Johnson  |  55000 | 2024-03-27 08:45:00 | Finance    | Female |
+|          4 | Michael   | Brown    |  60000 | 2024-03-28 11:15:00 | Marketing  | Male   |
+|          5 | Emily     | Taylor   |  70000 | 2024-03-29 09:30:00 | Sales      | Female |
+|          6 | David     | Clark    |  52000 | 2024-03-30 10:00:00 | IT         | Male   |
++------------+-----------+----------+--------+---------------------+------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select FirstName,ProjectName from employedetail;
+ERROR 1146 (42S02): Table 'sys.employedetail' doesn't exist
+mysql> select FirstName,ProjectName from employeedtail;
+ERROR 1146 (42S02): Table 'sys.employeedtail' doesn't exist
+mysql> select FirstName,ProjectName from employeedetail;
+ERROR 1054 (42S22): Unknown column 'ProjectName' in 'field list'
+mysql> select FirstName,ProjectName from employeedetail join projectdetail on pk.EmployeeID=fk.EmployeeID;
+ERROR 1054 (42S22): Unknown column 'pk.EmployeeID' in 'on clause'
+mysql> select FirstName,ProjectName from employeedetail join projectdetail;
++-----------+---------------------+
+| FirstName | ProjectName         |
++-----------+---------------------+
+| David     | Task Track          |
+| Emily     | Task Track          |
+| Michael   | Task Track          |
+| Alice     | Task Track          |
+| Jane      | Task Track          |
+| John      | Task Track          |
+| David     | CLP                 |
+| Emily     | CLP                 |
+| Michael   | CLP                 |
+| Alice     | CLP                 |
+| Jane      | CLP                 |
+| John      | CLP                 |
+| David     | Survey Management   |
+| Emily     | Survey Management   |
+| Michael   | Survey Management   |
+| Alice     | Survey Management   |
+| Jane      | Survey Management   |
+| John      | Survey Management   |
+| David     | HR Management       |
+| Emily     | HR Management       |
+| Michael   | HR Management       |
+| Alice     | HR Management       |
+| Jane      | HR Management       |
+| John      | HR Management       |
+| David     | Finance Project     |
+| Emily     | Finance Project     |
+| Michael   | Finance Project     |
+| Alice     | Finance Project     |
+| Jane      | Finance Project     |
+| John      | Finance Project     |
+| David     | Marketing Campaign  |
+| Emily     | Marketing Campaign  |
+| Michael   | Marketing Campaign  |
+| Alice     | Marketing Campaign  |
+| Jane      | Marketing Campaign  |
+| John      | Marketing Campaign  |
+| David     | Sales Strategy      |
+| Emily     | Sales Strategy      |
+| Michael   | Sales Strategy      |
+| Alice     | Sales Strategy      |
+| Jane      | Sales Strategy      |
+| John      | Sales Strategy      |
+| David     | IT Project A        |
+| Emily     | IT Project A        |
+| Michael   | IT Project A        |
+| Alice     | IT Project A        |
+| Jane      | IT Project A        |
+| John      | IT Project A        |
+| David     | IT Project B        |
+| Emily     | IT Project B        |
+| Michael   | IT Project B        |
+| Alice     | IT Project B        |
+| Jane      | IT Project B        |
+| John      | IT Project B        |
+| David     | HR Training Program |
+| Emily     | HR Training Program |
+| Michael   | HR Training Program |
+| Alice     | HR Training Program |
+| Jane      | HR Training Program |
+| John      | HR Training Program |
+| David     | Task Track          |
+| Emily     | Task Track          |
+| Michael   | Task Track          |
+| Alice     | Task Track          |
+| Jane      | Task Track          |
+| John      | Task Track          |
+| David     | Task Track          |
+| Emily     | Task Track          |
+| Michael   | Task Track          |
+| Alice     | Task Track          |
+| Jane      | Task Track          |
+| John      | Task Track          |
+| David     | Task Track          |
+| Emily     | Task Track          |
+| Michael   | Task Track          |
+| Alice     | Task Track          |
+| Jane      | Task Track          |
+| John      | Task Track          |
+| David     | Task Track          |
+| Emily     | Task Track          |
+| Michael   | Task Track          |
+| Alice     | Task Track          |
+| Jane      | Task Track          |
+| John      | Task Track          |
+| David     | Task Track          |
+| Emily     | Task Track          |
+| Michael   | Task Track          |
+| Alice     | Task Track          |
+| Jane      | Task Track          |
+| John      | Task Track          |
+| David     | Task Track          |
+| Emily     | Task Track          |
+| Michael   | Task Track          |
+| Alice     | Task Track          |
+| Jane      | Task Track          |
+| John      | Task Track          |
+| David     | CLP                 |
+| Emily     | CLP                 |
+| Michael   | CLP                 |
+| Alice     | CLP                 |
+| Jane      | CLP                 |
+| John      | CLP                 |
+| David     | CLP                 |
+| Emily     | CLP                 |
+| Michael   | CLP                 |
+| Alice     | CLP                 |
+| Jane      | CLP                 |
+| John      | CLP                 |
+| David     | CLP                 |
+| Emily     | CLP                 |
+| Michael   | CLP                 |
+| Alice     | CLP                 |
+| Jane      | CLP                 |
+| John      | CLP                 |
+| David     | CLP                 |
+| Emily     | CLP                 |
+| Michael   | CLP                 |
+| Alice     | CLP                 |
+| Jane      | CLP                 |
+| John      | CLP                 |
++-----------+---------------------+
+120 rows in set (0.00 sec)
+
+mysql> SELECT constraint_name, column_name
+    -> FROM information_schema.constraint_column_usage
+    -> WHERE table_name = 'your_table_name';
+ERROR 1109 (42S02): Unknown table 'CONSTRAINT_COLUMN_USAGE' in information_schema
+mysql> SELECT constraint_name, column_name FROM information_schema.constraint_column_usage WHERE table_name = 'employeedetail';
+ERROR 1109 (42S02): Unknown table 'CONSTRAINT_COLUMN_USAGE' in information_schema
+mysql> SELECT constraint_name, column_name FROM employeedetail WHERE table_name = 'employeedetail';
+ERROR 1054 (42S22): Unknown column 'constraint_name' in 'field list'
+mysql> CREATE TABLE EmployeeDetail [EmployeelD] INT IDENTITY (1,1) NOT NULL, [FirstName]
+    -> VARCHAR(50) NULL,
+    -> [LastName] NVARCHAR(50) NULL, [Salary] DECIMAL(10, 2) NULL, [JoiningDate] DATETIME NULL, [Depar tment] NVARCHAR(20) NULL,
+    -> [Gender] VARCHAR(10);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[EmployeelD] INT IDENTITY (1,1) NOT NULL, [FirstName]
+VARCHAR(50) NULL,
+[LastNam' at line 1
+mysql> drop table employeedetail;
+ERROR 3730 (HY000): Cannot drop table 'employeedetail' referenced by a foreign key constraint 'fk_EmployeeID' on table 'ProjectDetail'.
+mysql> select FirstName,ProjectName from employeedetail join projectdetail on pk.EmployeeID=fk_EmployeeID;
+ERROR 1054 (42S22): Unknown column 'pk.EmployeeID' in 'on clause'
+mysql> select FirstName,ProjectName from employeedetail join projectdetail on EmployeeID=fk_EmployeeID;
+ERROR 1052 (23000): Column 'EmployeeID' in on clause is ambiguous
+mysql> select FirstName,ProjectName from employeedetail join projectdetail on pk.EmployeeID=fk_EmployeeID;
+ERROR 1054 (42S22): Unknown column 'pk.EmployeeID' in 'on clause'
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> drop table projectdetail;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table employeedetail;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> cls
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cls' at line 1
+mysql> show databases;
++---------------------+
+| Database            |
++---------------------+
+| employee_management |
+| information_schema  |
+| mysql               |
+| performance_schema  |
+| sys                 |
++---------------------+
+5 rows in set (0.00 sec)
+
+mysql> use employee_management;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show table;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> show table
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> shows table
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'shows table' at line 1
+mysql> CREATE TABLE EmployeeDetail [EmployeelD] INT IDENTITY (1,1) NOT NULL, [FirstName]
+    -> VARCHAR(50) NULL,
+    -> [LastName] NVARCHAR(50) NULL, [Salary] DECIMAL(10, 2) NULL, [JoiningDate] DATETIME NULL, [Depar tment] NVARCHAR(20) NULL,
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[EmployeelD] INT IDENTITY (1,1) NOT NULL, [FirstName]
+VARCHAR(50) NULL,
+[LastNam' at line 1
+mysql> show tables;                                                                                                                                                         
++-------------------------------+
+| Tables_in_employee_management |
++-------------------------------+
+| department                    |
+| dept                          |
+| emp                           |
+| employee                      |
++-------------------------------+
+4 rows in set (0.01 sec)
+
+mysql> CREATE TABLE EmployeeDetail [EmployeelD] INT IDENTITY (1,1) NOT NULL, [FirstName]
+    -> VARCHAR(50) NULL,
+    -> [LastName] NVARCHAR(50) NULL, [Salary] DECIMAL(10, 2) NULL, [JoiningDate] DATETIME NULL, [Depar tment] NVARCHAR(20) NULL,
+    -> [Gender] VARCHAR(10);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[EmployeelD] INT IDENTITY (1,1) NOT NULL, [FirstName]
+VARCHAR(50) NULL,
+[LastNam' at line 1
+mysql> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.01 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-12-02 | 2450 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1887-07-13 | 3000 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-07-13 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select ename,dname from emp join dept on emp.deptno=dept.deptno;
+^[[A+--------+------------+
+| ename  | dname      |
++--------+------------+
+| CLARK  | ACCOUNTING |
+| KING   | ACCOUNTING |
+| MILLER | ACCOUNTING |
+| SMITH  | RESEARCH   |
+| JONES  | RESEARCH   |
+| SCOTT  | RESEARCH   |
+| ADAMS  | RESEARCH   |
+| FORD   | RESEARCH   |
+| WARD   | SALES      |
+| MARTIN | SALES      |
+| BLAKE  | SALES      |
+| JAMES  | SALES      |
++--------+------------+
+12 rows in set (0.01 sec)
+
+mysql> select ename,dname,sal from emp join dept on emp.deptno=dept.deptno;
++--------+------------+------+
+| ename  | dname      | sal  |
++--------+------------+------+
+| CLARK  | ACCOUNTING | 2450 |
+| KING   | ACCOUNTING | 5000 |
+| MILLER | ACCOUNTING | 1300 |
+| SMITH  | RESEARCH   |  800 |
+| JONES  | RESEARCH   | 2975 |
+| SCOTT  | RESEARCH   | 3000 |
+| ADAMS  | RESEARCH   | 1100 |
+| FORD   | RESEARCH   | 3000 |
+| WARD   | SALES      | 1250 |
+| MARTIN | SALES      | 1250 |
+| BLAKE  | SALES      | 2850 |
+| JAMES  | SALES      |  950 |
++--------+------------+------+
+12 rows in set (0.00 sec)
+
+mysql> select dname,sal from emp join dept on emp.deptno=dept.deptno;
++------------+------+
+| dname      | sal  |
++------------+------+
+| ACCOUNTING | 2450 |
+| ACCOUNTING | 5000 |
+| ACCOUNTING | 1300 |
+| RESEARCH   |  800 |
+| RESEARCH   | 2975 |
+| RESEARCH   | 3000 |
+| RESEARCH   | 1100 |
+| RESEARCH   | 3000 |
+| SALES      | 1250 |
+| SALES      | 1250 |
+| SALES      | 2850 |
+| SALES      |  950 |
++------------+------+
+12 rows in set (0.00 sec)
+
+mysql> select dname,sum(sal) from emp join dept on emp.deptno=dept.deptno;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'employee_management.dept.dname'; this is incompatible with sql_mode=only_full_group_by
+mysql> select dname,sum(sal) as Total_Sal from emp join dept on emp.deptno=dept.deptno;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'employee_management.dept.dname'; this is incompatible with sql_mode=only_full_group_by
+mysql> select dname,sum(sal) as Total_Sal from emp join dept on emp.deptno=dept.deptno group by dname;
++------------+-----------+
+| dname      | Total_Sal |
++------------+-----------+
+| RESEARCH   |     10875 |
+| SALES      |      6300 |
+| ACCOUNTING |      8750 |
++------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select dname,sum(sal) as Total_Sal from emp join dept on emp.deptno=dept.deptno group by dname order by sum(sal);
++------------+-----------+
+| dname      | Total_Sal |
++------------+-----------+
+| SALES      |      6300 |
+| ACCOUNTING |      8750 |
+| RESEARCH   |     10875 |
++------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select dname,sum(sal) as Total_Sal from emp join dept on emp.deptno=dept.deptno group by dname order by sum(sal) desc;
++------------+-----------+
+| dname      | Total_Sal |
++------------+-----------+
+| RESEARCH   |     10875 |
+| ACCOUNTING |      8750 |
+| SALES      |      6300 |
++------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-12-02 | 2450 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1887-07-13 | 3000 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-07-13 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select ename,job,dname from emp join dept on emp.deptno=dept.deptno;
++--------+-----------+------------+
+| ename  | job       | dname      |
++--------+-----------+------------+
+| CLARK  | MANAGER   | ACCOUNTING |
+| KING   | PRESIDENT | ACCOUNTING |
+| MILLER | CLERK     | ACCOUNTING |
+| SMITH  | CLERK     | RESEARCH   |
+| JONES  | MANAGER   | RESEARCH   |
+| SCOTT  | ANALYST   | RESEARCH   |
+| ADAMS  | CLERK     | RESEARCH   |
+| FORD   | ANALYST   | RESEARCH   |
+| WARD   | SALESMAN  | SALES      |
+| MARTIN | SALESMAN  | SALES      |
+| BLAKE  | MANAGER   | SALES      |
+| JAMES  | CLERK     | SALES      |
++--------+-----------+------------+
+12 rows in set (0.00 sec)
+
+mysql> select ename,job,dname from emp join dept on emp.deptno=dept.deptno order by ename asc;
++--------+-----------+------------+
+| ename  | job       | dname      |
++--------+-----------+------------+
+| ADAMS  | CLERK     | RESEARCH   |
+| BLAKE  | MANAGER   | SALES      |
+| CLARK  | MANAGER   | ACCOUNTING |
+| FORD   | ANALYST   | RESEARCH   |
+| JAMES  | CLERK     | SALES      |
+| JONES  | MANAGER   | RESEARCH   |
+| KING   | PRESIDENT | ACCOUNTING |
+| MARTIN | SALESMAN  | SALES      |
+| MILLER | CLERK     | ACCOUNTING |
+| SCOTT  | ANALYST   | RESEARCH   |
+| SMITH  | CLERK     | RESEARCH   |
+| WARD   | SALESMAN  | SALES      |
++--------+-----------+------------+
+12 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-12-02 | 2450 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1887-07-13 | 3000 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-07-13 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select * from dep;
+ERROR 1146 (42S02): Table 'employee_management.dep' doesn't exist
+mysql> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
++--------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from emp where comm NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NULL' at line 1
+mysql> select * from emp where comm > 0;
++-------+--------+----------+------+------------+------+------+--------+
+| empno | ename  | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+----------+------+------------+------+------+--------+
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
++-------+--------+----------+------+------------+------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from emp where comm > null;
+Empty set (0.00 sec)
+
+mysql> select * from emp where comm is not null;
++-------+--------+----------+------+------------+------+------+--------+
+| empno | ename  | job      | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+----------+------+------------+------+------+--------+
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
++-------+--------+----------+------+------------+------+------+--------+
+2 rows in set (0.01 sec)
+
+mysql> insert into dept(dname,loc) values(SALES,NEW YORK);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'YORK)' at line 1
+mysql> insert into dept(dname,loc) values(SALES,'NEW YORK');
+ERROR 1054 (42S22): Unknown column 'SALES' in 'field list'
+mysql> insert into dept(dname,loc) values('SALES','NEW YORK');
+ERROR 1364 (HY000): Field 'deptno' doesn't have a default value
+mysql> insert into dept(deptno,dname,loc) values(null,'SALES','NEW YORK');
+ERROR 1048 (23000): Column 'deptno' cannot be null
+mysql> insert into dept(deptno,dname,loc) values(50,null,null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into dept(deptno,dname,loc) values(60,'SALES',null);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
+|     50 | NULL       | NULL     |
+|     60 | SALES      | NULL     |
++--------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-12-02 | 2450 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1887-07-13 | 3000 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-07-13 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+12 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> select * from emp;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-12-02 | 2450 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1887-07-13 | 3000 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-07-13 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
+|     50 | NULL       | NULL     |
+|     60 | SALES      | NULL     |
++--------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select ename,job.dname from emp left outer join dept on emp.deptno=dept.deptno;
+ERROR 1054 (42S22): Unknown column 'job.dname' in 'field list'
+mysql> select ename,job,dname from emp left outer join dept on emp.deptno=dept.deptno;
++--------+-----------+------------+
+| ename  | job       | dname      |
++--------+-----------+------------+
+| SMITH  | CLERK     | RESEARCH   |
+| WARD   | SALESMAN  | SALES      |
+| JONES  | MANAGER   | RESEARCH   |
+| MARTIN | SALESMAN  | SALES      |
+| BLAKE  | MANAGER   | SALES      |
+| CLARK  | MANAGER   | ACCOUNTING |
+| SCOTT  | ANALYST   | RESEARCH   |
+| KING   | PRESIDENT | ACCOUNTING |
+| ADAMS  | CLERK     | RESEARCH   |
+| JAMES  | CLERK     | SALES      |
+| FORD   | ANALYST   | RESEARCH   |
+| MILLER | CLERK     | ACCOUNTING |
++--------+-----------+------------+
+12 rows in set (0.00 sec)
+
+mysql> select ename,job,dname from emp left outer join dept on emp.deptno=dept.deptno order by ename asc;
++--------+-----------+------------+
+| ename  | job       | dname      |
++--------+-----------+------------+
+| ADAMS  | CLERK     | RESEARCH   |
+| BLAKE  | MANAGER   | SALES      |
+| CLARK  | MANAGER   | ACCOUNTING |
+| FORD   | ANALYST   | RESEARCH   |
+| JAMES  | CLERK     | SALES      |
+| JONES  | MANAGER   | RESEARCH   |
+| KING   | PRESIDENT | ACCOUNTING |
+| MARTIN | SALESMAN  | SALES      |
+| MILLER | CLERK     | ACCOUNTING |
+| SCOTT  | ANALYST   | RESEARCH   |
+| SMITH  | CLERK     | RESEARCH   |
+| WARD   | SALESMAN  | SALES      |
++--------+-----------+------------+
+12 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+------+------------+------+------+--------+
+| empno | ename  | job       | mgr  | hiredate   | sal  | comm | deptno |
++-------+--------+-----------+------+------------+------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800 | NULL |     20 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250 |  500 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975 | NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250 | 1400 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-12-02 | 2450 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1887-07-13 | 3000 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1987-07-13 | 1100 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300 | NULL |     10 |
++-------+--------+-----------+------+------------+------+------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+----------+
+| deptno | dname      | loc      |
++--------+------------+----------+
+|     10 | ACCOUNTING | NEW YORK |
+|     20 | RESEARCH   | DALLAS   |
+|     30 | SALES      | CHICAGO  |
+|     40 | OPERATIONS | BOSTON   |
+|     50 | NULL       | NULL     |
+|     60 | SALES      | NULL     |
++--------+------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select dname,ename from dept join emp;
++------------+--------+
+| dname      | ename  |
++------------+--------+
+| SALES      | SMITH  |
+| NULL       | SMITH  |
+| OPERATIONS | SMITH  |
+| SALES      | SMITH  |
+| RESEARCH   | SMITH  |
+| ACCOUNTING | SMITH  |
+| SALES      | WARD   |
+| NULL       | WARD   |
+| OPERATIONS | WARD   |
+| SALES      | WARD   |
+| RESEARCH   | WARD   |
+| ACCOUNTING | WARD   |
+| SALES      | JONES  |
+| NULL       | JONES  |
+| OPERATIONS | JONES  |
+| SALES      | JONES  |
+| RESEARCH   | JONES  |
+| ACCOUNTING | JONES  |
+| SALES      | MARTIN |
+| NULL       | MARTIN |
+| OPERATIONS | MARTIN |
+| SALES      | MARTIN |
+| RESEARCH   | MARTIN |
+| ACCOUNTING | MARTIN |
+| SALES      | BLAKE  |
+| NULL       | BLAKE  |
+| OPERATIONS | BLAKE  |
+| SALES      | BLAKE  |
+| RESEARCH   | BLAKE  |
+| ACCOUNTING | BLAKE  |
+| SALES      | CLARK  |
+| NULL       | CLARK  |
+| OPERATIONS | CLARK  |
+| SALES      | CLARK  |
+| RESEARCH   | CLARK  |
+| ACCOUNTING | CLARK  |
+| SALES      | SCOTT  |
+| NULL       | SCOTT  |
+| OPERATIONS | SCOTT  |
+| SALES      | SCOTT  |
+| RESEARCH   | SCOTT  |
+| ACCOUNTING | SCOTT  |
+| SALES      | KING   |
+| NULL       | KING   |
+| OPERATIONS | KING   |
+| SALES      | KING   |
+| RESEARCH   | KING   |
+| ACCOUNTING | KING   |
+| SALES      | ADAMS  |
+| NULL       | ADAMS  |
+| OPERATIONS | ADAMS  |
+| SALES      | ADAMS  |
+| RESEARCH   | ADAMS  |
+| ACCOUNTING | ADAMS  |
+| SALES      | JAMES  |
+| NULL       | JAMES  |
+| OPERATIONS | JAMES  |
+| SALES      | JAMES  |
+| RESEARCH   | JAMES  |
+| ACCOUNTING | JAMES  |
+| SALES      | FORD   |
+| NULL       | FORD   |
+| OPERATIONS | FORD   |
+| SALES      | FORD   |
+| RESEARCH   | FORD   |
+| ACCOUNTING | FORD   |
+| SALES      | MILLER |
+| NULL       | MILLER |
+| OPERATIONS | MILLER |
+| SALES      | MILLER |
+| RESEARCH   | MILLER |
+| ACCOUNTING | MILLER |
++------------+--------+
+72 rows in set (0.00 sec)
+
+mysql> select dname,ename from dept join emp on dept.deptno=emp.deptno;
++------------+--------+
+| dname      | ename  |
++------------+--------+
+| RESEARCH   | SMITH  |
+| SALES      | WARD   |
+| RESEARCH   | JONES  |
+| SALES      | MARTIN |
+| SALES      | BLAKE  |
+| ACCOUNTING | CLARK  |
+| RESEARCH   | SCOTT  |
+| ACCOUNTING | KING   |
+| RESEARCH   | ADAMS  |
+| SALES      | JAMES  |
+| RESEARCH   | FORD   |
+| ACCOUNTING | MILLER |
++------------+--------+
+12 rows in set (0.00 sec)
+
+mysql> select dname,ename from dept left outer join emp on dept.deptno=emp.deptno;
++------------+--------+
+| dname      | ename  |
++------------+--------+
+| ACCOUNTING | CLARK  |
+| ACCOUNTING | KING   |
+| ACCOUNTING | MILLER |
+| RESEARCH   | SMITH  |
+| RESEARCH   | JONES  |
+| RESEARCH   | SCOTT  |
+| RESEARCH   | ADAMS  |
+| RESEARCH   | FORD   |
+| SALES      | WARD   |
+| SALES      | MARTIN |
+| SALES      | BLAKE  |
+| SALES      | JAMES  |
+| OPERATIONS | NULL   |
+| NULL       | NULL   |
+| SALES      | NULL   |
++------------+--------+
+15 rows in set (0.00 sec)
+
+mysql> select dname,ename from dept right outer join emp on dept.deptno=emp.deptno;
++------------+--------+
+| dname      | ename  |
++------------+--------+
+| RESEARCH   | SMITH  |
+| SALES      | WARD   |
+| RESEARCH   | JONES  |
+| SALES      | MARTIN |
+| SALES      | BLAKE  |
+| ACCOUNTING | CLARK  |
+| RESEARCH   | SCOTT  |
+| ACCOUNTING | KING   |
+| RESEARCH   | ADAMS  |
+| SALES      | JAMES  |
+| RESEARCH   | FORD   |
+| ACCOUNTING | MILLER |
++------------+--------+
+12 rows in set (0.00 sec)
+
+mysql> 
